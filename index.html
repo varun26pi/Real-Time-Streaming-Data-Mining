@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Real-Time & Streaming Data Mining — Technical Blog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --bg:            #f7f6f2;
+    --bg-white:      #ffffff;
+    --bg-card:       #ffffff;
+    --bg-subtle:     #f0efe9;
+    --bg-highlight:  #eaf0fb;
+    --accent:        #1d4ed8;
+    --accent-light:  #eff4ff;
+    --accent-border: #bfcfff;
+    --accent-text:   #1e3a8a;
+    --teal:          #0d7f6e;
+    --teal-light:    #ecfdf5;
+    --teal-border:   #a7f3d0;
+    --coral:         #c0392b;
+    --coral-light:   #fff5f5;
+    --coral-border:  #fecaca;
+    --amber:         #92400e;
+    --amber-light:   #fffbeb;
+    --amber-border:  #fde68a;
+    --text-primary:  #18181b;
+    --text-secondary:#52525b;
+    --text-muted:    #a1a1aa;
+    --border:        #e4e4e7;
+    --border-strong: #d1d5db;
+    --nav-bg:        rgba(247,246,242,0.92);
+    --shadow-sm:     0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md:     0 4px 12px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 58px;
+  }
+
+  .nav-brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .nav-links { display: flex; gap: 2.25rem; list-style: none; }
+
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: color 0.18s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    background: var(--accent-light);
+    color: var(--accent-text);
+    border: 1px solid var(--accent-border);
+    padding: 4px 12px;
+    border-radius: 3px;
+    letter-spacing: 0.07em;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    background: var(--bg-white);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, rgba(29,78,216,0.018) 0px, rgba(29,78,216,0.018) 1px, transparent 1px, transparent 72px),
+      repeating-linear-gradient(0deg,  rgba(29,78,216,0.018) 0px, rgba(29,78,216,0.018) 1px, transparent 1px, transparent 72px);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 6rem 2.5rem 5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 500;
+    margin-bottom: 1.75rem;
+  }
+
+  .hero-kicker::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--teal);
+    border-radius: 1px;
+  }
+
+  .hero h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 600;
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+    margin-bottom: 1.4rem;
+    max-width: 680px;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--accent); }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 560px;
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    flex-wrap: wrap;
+  }
+
+  .meta-sep { margin: 0 0.9rem; color: var(--border-strong); }
+
+  /* LAYOUT */
+  .page-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 232px;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .article-body { min-width: 0; padding: 4rem 0 7rem; }
+
+  /* SIDEBAR */
+  .sidebar { position: sticky; top: 78px; padding: 4rem 0 3rem; }
+
+  .sidebar-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.85rem;
+    font-weight: 500;
+  }
+
+  .toc-list { list-style: none; border-left: 2px solid var(--border); }
+
+  .toc-list li a {
+    display: block;
+    padding: 5px 0 5px 14px;
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+    transition: all 0.18s;
+    line-height: 1.45;
+  }
+
+  .toc-list li a:hover { color: var(--accent); border-left-color: var(--accent-border); }
+  .toc-list li a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+
+  .sidebar-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+    margin-top: 1.75rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .sidebar-card .sc-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+
+  .tool-chip {
+    display: inline-block;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-text);
+    background: var(--accent-light);
+    border: 1px solid var(--accent-border);
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin: 3px 3px 3px 0;
+    font-weight: 400;
+  }
+
+  .tool-chip.teal { color: var(--teal); background: var(--teal-light); border-color: var(--teal-border); }
+  .tool-chip.amber { color: var(--amber); background: var(--amber-light); border-color: var(--amber-border); }
+
+  /* PROSE */
+  .article-body p { margin-bottom: 1.5rem; color: var(--text-primary); font-weight: 300; }
+
+  .article-body h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 3.75rem 0 1.25rem;
+    line-height: 1.28;
+    letter-spacing: -0.01em;
+    scroll-margin-top: 82px;
+  }
+
+  .article-body h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 2.5rem 0 0.85rem;
+  }
+
+  /* PULL QUOTE */
+  .pullquote {
+    margin: 3rem 0;
+    padding: 1.5rem 1.75rem 1.5rem 2rem;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-light);
+    border-radius: 0 8px 8px 0;
+  }
+
+  .pullquote p {
+    font-family: 'Lora', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--accent-text);
+    margin: 0;
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem 1.75rem;
+    margin: 2.5rem 0;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .highlight-box .hb-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.7rem;
+    font-weight: 500;
+  }
+
+  .highlight-box.warn { border-left: 3px solid var(--coral); }
+  .highlight-box.warn .hb-label { color: var(--coral); }
+  .highlight-box.info { border-left: 3px solid var(--accent); }
+  .highlight-box.info .hb-label { color: var(--accent); }
+
+  .highlight-box p { font-size: 15px; color: var(--text-secondary); margin: 0; line-height: 1.75; }
+
+  /* ARCHITECTURE */
+  .arch-pipeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin: 2.5rem 0 3rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    background: var(--bg-card);
+  }
+
+  .arch-step {
+    padding: 1.4rem 0.75rem;
+    border-right: 1px solid var(--border);
+    text-align: center;
+    background: var(--bg-card);
+  }
+
+  .arch-step:last-child { border-right: none; }
+  .arch-step.core { background: var(--bg-highlight); border-top: 2px solid var(--accent); }
+
+  .arch-num {
+    font-family: 'Lora', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    color: var(--border-strong);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .arch-step.core .arch-num { color: var(--accent); }
+
+  .arch-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  .arch-step.core .arch-label { color: var(--accent-text); }
+
+  /* TABLE */
+  .data-table-wrap {
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+
+  thead tr { background: var(--bg-subtle); border-bottom: 1px solid var(--border-strong); }
+
+  thead th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 13px 18px;
+    text-align: left;
+    font-weight: 500;
+  }
+
+  tbody td {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td:first-child { font-weight: 500; color: var(--text-primary); white-space: nowrap; font-size: 13.5px; }
+  tbody td:nth-child(2) { color: var(--accent); }
+  tbody tr:hover td { background: var(--bg-subtle); }
+
+  /* TECH GRID */
+  .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 2rem 0 2.5rem; }
+
+  .tech-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.15rem 1.3rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .tech-card:hover { border-color: var(--accent-border); box-shadow: var(--shadow-md); }
+
+  .tc-category {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .tc-tools { font-size: 13.5px; color: var(--text-primary); line-height: 1.6; font-weight: 400; }
+
+  /* APP GRID */
+  .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 2rem 0; }
+
+  .app-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.3rem 1.4rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .app-card:hover { box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+
+  .app-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .app-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .app-card p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; margin: 0; }
+
+  /* CHALLENGES */
+  .challenges-list { list-style: none; margin: 1.5rem 0 2rem; }
+
+  .challenges-list li {
+    display: flex;
+    gap: 16px;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .challenges-list li:first-child { border-top: 1px solid var(--border); }
+
+  .ch-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    min-width: 22px;
+    padding-top: 3px;
+    font-weight: 500;
+  }
+
+  .ch-body { flex: 1; }
+  .ch-title { font-size: 14.5px; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+  .ch-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; }
+
+  /* FUTURE GRID */
+  .future-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 2rem 0; }
+
+  .future-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 8px 8px;
+    padding: 1.3rem 1.4rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+  }
+
+  .future-card:hover { box-shadow: var(--shadow-md); }
+  .future-card.teal  { border-top-color: var(--teal); }
+  .future-card.coral { border-top-color: var(--coral); }
+  .future-card.amber { border-top-color: #d97706; }
+
+  .fc-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 0.6rem; }
+  .future-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; margin: 0; }
+
+  /* CONCLUSION */
+  .conclusion-banner {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 10px 10px;
+    padding: 2.5rem;
+    margin-top: 3rem;
+    box-shadow: var(--shadow-md);
+  }
+
+  .conclusion-banner h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 1.1rem;
+    scroll-margin-top: 82px;
+    letter-spacing: -0.01em;
+  }
+
+  .conclusion-banner p { color: var(--text-secondary); font-size: 15.5px; margin-bottom: 1.1rem; line-height: 1.8; }
+  .conclusion-banner p:last-child { margin: 0; }
+
+  /* SECTION DIVIDER */
+  .sec-divider { display: flex; align-items: center; gap: 14px; margin: 3rem 0; }
+
+  .sec-divider span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .sec-divider::before, .sec-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg-white);
+    border-top: 1px solid var(--border);
+    padding: 2.25rem 2.5rem;
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .ftag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--border-strong);
+    color: var(--text-secondary);
+    padding: 4px 10px;
+    border-radius: 3px;
+    background: var(--bg-white);
+  }
+
+  .footer-copy {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-kicker { animation: fadeUp 0.45s ease both; }
+  .hero h1     { animation: fadeUp 0.45s 0.08s ease both; }
+  .hero-sub    { animation: fadeUp 0.45s 0.16s ease both; }
+  .hero-meta   { animation: fadeUp 0.45s 0.24s ease both; }
+
+  /* RESPONSIVE */
+  @media (max-width: 720px) {
+    .page-wrap { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    nav .nav-links { display: none; }
+    .arch-pipeline { grid-template-columns: 1fr 1fr; }
+    .tech-grid, .app-grid, .future-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2rem; }
+    .hero-inner { padding: 4rem 1.5rem 3rem; }
+    .page-wrap { padding: 0 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-brand">Data Engineering Series</span>
+  <ul class="nav-links">
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#techniques">Techniques</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#applications">Applications</a></li>
+  </ul>
+  <span class="nav-tag">Technical Blog</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-kicker">Data Engineering</div>
+    <h1>Real-Time &amp; <em>Streaming</em><br>Data Mining</h1>
+    <p class="hero-sub">How modern systems extract intelligence from data in motion — and why the shift from batch to stream has become foundational to every data-driven organization.</p>
+    <div class="hero-meta">
+      <span>April 25, 2026</span>
+      <span class="meta-sep">/</span>
+      <span>12 min read</span>
+      <span class="meta-sep">/</span>
+      <span>Technical Deep Dive</span>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE CONTENT -->
+<div class="page-wrap">
+
+  <article class="article-body">
+
+    <p>For most of computing history, data analysis meant waiting. You collected records, stored them, and at some scheduled interval — nightly, weekly, monthly — ran a batch job that produced a report. The world moved; your data caught up later. That lag was acceptable when systems were slow and decisions were slower.</p>
+
+    <p>It is no longer acceptable. Fraud happens in milliseconds. Network failures propagate in seconds. Customer behavior shifts by the hour. The gap between when something occurs and when an organization knows about it has become one of the most consequential variables in modern business. Real-time and streaming data mining exists to close that gap.</p>
+
+    <div class="pullquote">
+      <p>The central question of streaming analytics is not how to store data — but how to think with it while it is still moving.</p>
+    </div>
+
+    <h2 id="defining">Defining the problem space</h2>
+
+    <p>Traditional data mining operates on a corpus — a bounded, finite dataset that has been collected, cleaned, and made available for analysis. The analyst poses a question, runs a process, and receives an answer. The process may take minutes or hours, and that is considered normal.</p>
+
+    <p>Streaming data mining operates under fundamentally different constraints. The data is unbounded: it has no fixed end. It arrives continuously, often at high velocity, and the system must extract patterns and make decisions without ever seeing the complete picture. Every assumption that makes batch processing tractable — the ability to scan the entire dataset, to sort and index freely, to revisit records arbitrarily — must be reconsidered.</p>
+
+    <div class="highlight-box info">
+      <div class="hb-label">Core Distinction</div>
+      <p>Batch processing asks: what happened? Streaming processing asks: what is happening, and what should be done about it right now? The two questions require different architectures, different algorithms, and different notions of correctness.</p>
+    </div>
+
+    <p>Real-time processing refers to systems where data is acted upon within milliseconds to seconds of arrival. Streaming processing is the broader term for handling continuous, unbounded data flows. The meaningful distinction in practice is latency measured against business requirements.</p>
+
+    <div class="sec-divider"><span>comparison</span></div>
+
+    <div class="data-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Real-Time / Streaming</th>
+            <th>Batch Processing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Data handling</td><td>Continuous, unbounded flow</td><td>Finite datasets, periodic jobs</td></tr>
+          <tr><td>Latency</td><td>Milliseconds to seconds</td><td>Minutes to hours</td></tr>
+          <tr><td>Decision speed</td><td>Immediate action</td><td>Deferred reporting</td></tr>
+          <tr><td>Memory model</td><td>Fixed windows, approximate structures</td><td>Full dataset in memory or on disk</td></tr>
+          <tr><td>Algorithm type</td><td>Single-pass, online, incremental</td><td>Multi-pass, exact, iterative</td></tr>
+          <tr><td>Typical use cases</td><td>Fraud detection, alerting, monitoring</td><td>Monthly reports, model training, ETL</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="architecture">Architecture of a streaming system</h2>
+
+    <p>A well-designed streaming data pipeline has five identifiable stages. Each stage has its own failure modes, scalability considerations, and tooling choices.</p>
+
+    <div class="arch-pipeline">
+      <div class="arch-step">
+        <span class="arch-num">01</span>
+        <span class="arch-label">Data Sources</span>
+      </div>
+      <div class="arch-step core">
+        <span class="arch-num">02</span>
+        <span class="arch-label">Ingestion</span>
+      </div>
+      <div class="arch-step core">
+        <span class="arch-num">03</span>
+        <span class="arch-label">Stream Storage</span>
+      </div>
+      <div class="arch-step core">
+        <span class="arch-num">04</span>
+        <span class="arch-label">Processing</span>
+      </div>
+      <div class="arch-step">
+        <span class="arch-num">05</span>
+        <span class="arch-label">Destination</span>
+      </div>
+    </div>
+
+    <p>Data sources are the origin points: IoT sensors, web servers emitting click events, financial exchanges generating trade records, mobile applications logging user interactions. These sources generate data at varying rates — sometimes predictable, often bursty — and the system must absorb that variance without loss.</p>
+
+    <p>Ingestion is handled by message broker systems designed for high throughput and durability. Apache Kafka has become the de facto standard, offering partitioned, replicated log storage that allows downstream consumers to read at their own pace while the broker absorbs upstream spikes. Amazon Kinesis provides similar capabilities in a managed cloud context.</p>
+
+    <p>Stream processing is where data mining happens. This layer applies transformations, aggregations, filters, and analytical models to data as it flows through. It is computationally the most demanding stage and the one where most architectural decisions are made. The destination is wherever results go: a dashboard, a database, an alerting system, or another stream feeding a downstream pipeline.</p>
+
+    <h2 id="techniques">Techniques that make streaming analysis possible</h2>
+
+    <p>The algorithms used in streaming data mining are not simply batch algorithms running faster. They are fundamentally different approaches, designed around the constraints of unbounded data and limited memory.</p>
+
+    <h3>Window-based computation</h3>
+
+    <p>Since a streaming system cannot process an infinite history, it must define a finite window of data to analyze at any given moment. Time-based windows capture all events within a fixed duration. Count-based windows capture a fixed number of records. Sliding windows advance continuously, overlapping with predecessors. Tumbling windows are non-overlapping, resetting completely at each interval.</p>
+
+    <p>The choice of window type and size is not merely a technical parameter — it is a business decision. A fraud detection system might use a 10-second sliding window to catch rapid card testing. A system monitoring equipment health might use a 1-hour tumbling window to identify gradual degradation patterns.</p>
+
+    <h3>Approximate algorithms</h3>
+
+    <p>Exact computation is often impossible at stream speeds and at scale. Approximate algorithms trade a small, bounded error for dramatically reduced memory and compute requirements. HyperLogLog estimates cardinality using fixed memory regardless of input size. Count-Min Sketch estimates element frequency. Bloom filters answer membership queries with high efficiency. These structures are mathematically rigorous tools with guaranteed error bounds — not approximations of convenience.</p>
+
+    <h3>Incremental and online learning</h3>
+
+    <p>Machine learning models in streaming contexts cannot be retrained from scratch when new data arrives. The computational cost would be prohibitive, and by the time a batch retrain completed, the model would already be stale. Incremental learning updates model parameters as each new data point arrives, allowing continuous adaptation without ever reprocessing the full historical dataset.</p>
+
+    <h3>Concept drift detection</h3>
+
+    <p>One of the most practically significant challenges in streaming data mining is that statistical properties of the data change over time. User behavior shifts with seasons and campaigns. Equipment characteristics change as components age. A model trained on last month's data may perform poorly today — not because it was built incorrectly, but because the world it was modelling has changed. Robust streaming systems monitor for concept drift explicitly, using statistical tests to detect when incoming distributions have diverged significantly from prior expectations.</p>
+
+    <h2 id="tools">Tools and platforms</h2>
+
+    <p>The streaming ecosystem has matured considerably over the past decade. The right tool depends on throughput requirements, latency targets, team expertise, and whether infrastructure is managed in-house or in the cloud.</p>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tc-category">Ingestion</div>
+        <div class="tc-tools">Apache Kafka, Amazon Kinesis, Apache Pulsar</div>
+      </div>
+      <div class="tech-card">
+        <div class="tc-category">Stream Processing</div>
+        <div class="tc-tools">Apache Flink, Apache Spark Streaming, Apache Storm</div>
+      </div>
+      <div class="tech-card">
+        <div class="tc-category">Cloud Native</div>
+        <div class="tc-tools">Google Dataflow, Azure Stream Analytics, AWS Kinesis Analytics</div>
+      </div>
+    </div>
+
+    <p>Apache Kafka handles ingestion for some of the highest-throughput systems in the world. Apache Flink provides stateful stream processing with exactly-once semantics, sub-second latency, and native support for event-time processing — correctly handling events that arrive out of order. Apache Spark Streaming offers micro-batch processing with the operational familiarity of the Spark API.</p>
+
+    <div class="sec-divider"><span>applications</span></div>
+
+    <h2 id="applications">Where streaming data mining is applied</h2>
+
+    <div class="app-grid">
+      <div class="app-card">
+        <div class="app-card-title"><span class="app-dot" style="background:#dc2626"></span>Fraud Detection</div>
+        <p>A payment processor evaluates each transaction against thousands of behavioral signals — velocity, geography, merchant category — and flags anomalies in under 200 milliseconds.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-card-title"><span class="app-dot" style="background:#0d7f6e"></span>Predictive Maintenance</div>
+        <p>Sensors on turbines and compressors emit continuous readings. Streaming analytics identifies patterns that precede failures, issuing alerts days before a breakdown would otherwise occur.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-card-title"><span class="app-dot" style="background:#1d4ed8"></span>Financial Trading</div>
+        <p>Algorithmic trading systems monitor market conditions and execute strategies with microsecond latency. Competitive advantage is measured in fractions of a second.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-card-title"><span class="app-dot" style="background:#7c3aed"></span>Healthcare Monitoring</div>
+        <p>Continuous streams from bedside monitors and wearables are analyzed in real time to detect early signs of sepsis or cardiac events before they are clinically apparent.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-card-title"><span class="app-dot" style="background:#d97706"></span>Social Media Analysis</div>
+        <p>Platforms process millions of posts per minute to track trending topics, identify coordinated inauthentic behavior, and route content recommendations in real time.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-card-title"><span class="app-dot" style="background:#0891b2"></span>IoT Monitoring</div>
+        <p>Smart city infrastructure, connected vehicles, and industrial plants generate continuous sensor data analyzed locally or in the cloud with minimal delay.</p>
+      </div>
+    </div>
+
+    <h2 id="challenges">The challenges that remain</h2>
+
+    <div class="highlight-box warn">
+      <div class="hb-label">Operational Reality</div>
+      <p>The hardest problems in streaming systems are not algorithmic — they are operational: ensuring pipelines continue functioning correctly at scale, across failures, over time, as upstream data sources evolve in ways not anticipated when the pipeline was designed.</p>
+    </div>
+
+    <ul class="challenges-list">
+      <li>
+        <span class="ch-num">01</span>
+        <div class="ch-body">
+          <div class="ch-title">Infrastructure cost</div>
+          <div class="ch-desc">High-throughput streaming clusters require dedicated compute, memory, and network capacity that runs continuously. The cost model is fundamentally different from batch processing, where jobs run briefly and release resources.</div>
+        </div>
+      </li>
+      <li>
+        <span class="ch-num">02</span>
+        <div class="ch-body">
+          <div class="ch-title">Fault tolerance and exactly-once semantics</div>
+          <div class="ch-desc">A system that loses events during a node failure, or processes events twice after a restart, produces incorrect results. Frameworks like Flink offer exactly-once guarantees, but those guarantees require careful configuration and come with overhead.</div>
+        </div>
+      </li>
+      <li>
+        <span class="ch-num">03</span>
+        <div class="ch-body">
+          <div class="ch-title">Data quality in motion</div>
+          <div class="ch-desc">Late-arriving events, out-of-order records, duplicate messages, and malformed entries are all common. A streaming system must handle these gracefully using watermarks, buffering strategies, or explicit uncertainty accounting.</div>
+        </div>
+      </li>
+      <li>
+        <span class="ch-num">04</span>
+        <div class="ch-body">
+          <div class="ch-title">Scalability complexity</div>
+          <div class="ch-desc">Scaling a streaming system to handle traffic spikes requires partitioning, parallel processing lanes, and autoscaling policies — each introducing new failure modes and coordination overhead.</div>
+        </div>
+      </li>
+      <li>
+        <span class="ch-num">05</span>
+        <div class="ch-body">
+          <div class="ch-title">Concept drift and model staleness</div>
+          <div class="ch-desc">Models embedded in streaming pipelines can degrade silently as data distributions shift. Without explicit monitoring and adaptation mechanisms, a pipeline that functioned correctly six months ago may produce subtly wrong outputs today.</div>
+        </div>
+      </li>
+    </ul>
+
+    <h2 id="future">Looking ahead</h2>
+
+    <p>The boundary between streaming analytics and machine learning inference is dissolving. Modern feature stores maintain real-time features computed from streams, served directly to inference endpoints. Models that once required batch feature computation can now operate on features that are seconds old rather than hours old, dramatically improving accuracy in time-sensitive contexts.</p>
+
+    <div class="future-grid">
+      <div class="future-card">
+        <div class="fc-title">Edge Computing</div>
+        <p>Lightweight analytical models deployed directly on embedded hardware — factory floors, vehicles, base stations — process data locally and transmit only results and anomalies.</p>
+      </div>
+      <div class="future-card teal">
+        <div class="fc-title">AI-Embedded Pipelines</div>
+        <p>Large language models integrated into streaming pipelines can parse unstructured text streams — support tickets, news feeds — and extract structured signals at previously unattainable quality.</p>
+      </div>
+      <div class="future-card amber">
+        <div class="fc-title">Real-Time Personalization</div>
+        <p>Consumer platforms are shifting from hourly batch recommendation cycles to continuous, stream-driven personalization that responds to each interaction within seconds.</p>
+      </div>
+      <div class="future-card coral">
+        <div class="fc-title">Autonomous Decision Systems</div>
+        <p>Streaming analytics combined with reinforcement learning enables systems that close the loop automatically — detecting a condition, selecting a response, and executing it without human intervention.</p>
+      </div>
+    </div>
+
+    <div class="conclusion-banner">
+      <h2 id="conclusion">Conclusion</h2>
+      <p>Real-time and streaming data mining is not a refinement of batch analytics. It is a different discipline, built on different assumptions, using different algorithms, and oriented toward different outcomes. Where batch processing answers historical questions, streaming analytics enables present-tense intelligence — the ability to know what is happening now and to act on that knowledge before the moment has passed.</p>
+      <p>The engineering challenges are real: the systems are complex, the failure modes are subtle, and the operational demands are continuous. But so is the value. The organizations that have invested in streaming infrastructure have fundamentally changed what they are able to do — not just how fast they can do what they already did, but the categories of decisions and responses that are possible at all.</p>
+      <p>For data engineers and systems architects, fluency in streaming data mining is no longer a specialization. It is a core competency.</p>
+    </div>
+
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-label">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#defining">Defining the problem</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#techniques">Techniques</a></li>
+      <li><a href="#tools">Tools &amp; platforms</a></li>
+      <li><a href="#applications">Applications</a></li>
+      <li><a href="#challenges">Challenges</a></li>
+      <li><a href="#future">Future trends</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+    </ul>
+
+    <div class="sidebar-card">
+      <div class="sc-title">Open-source tools</div>
+      <span class="tool-chip">Apache Kafka</span>
+      <span class="tool-chip">Apache Flink</span>
+      <span class="tool-chip">Spark Streaming</span>
+      <span class="tool-chip">Apache Storm</span>
+      <span class="tool-chip">Apache Pulsar</span>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sc-title">Cloud platforms</div>
+      <span class="tool-chip teal">Amazon Kinesis</span>
+      <span class="tool-chip teal">Azure Stream</span>
+      <span class="tool-chip teal">Google Dataflow</span>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sc-title">Key techniques</div>
+      <span class="tool-chip amber">Sliding Windows</span>
+      <span class="tool-chip amber">HyperLogLog</span>
+      <span class="tool-chip amber">Online Learning</span>
+      <span class="tool-chip amber">Drift Detection</span>
+    </div>
+  </aside>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-tags">
+    <span class="ftag">Data Engineering</span>
+    <span class="ftag">Apache Kafka</span>
+    <span class="ftag">Apache Flink</span>
+    <span class="ftag">Stream Processing</span>
+    <span class="ftag">Real-Time Analytics</span>
+    <span class="ftag">Machine Learning</span>
+  </div>
+  <span class="footer-copy">April 2026 — Data Engineering Series</span>
+</footer>
+
+<script>
+  const sections = document.querySelectorAll('h2[id]');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
